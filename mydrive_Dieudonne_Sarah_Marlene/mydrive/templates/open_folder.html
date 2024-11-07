@@ -1,0 +1,46 @@
+{% extends "base_nav.html" %}
+{% block content %}
+<div class="container">
+    <h2>Contents of {{ folder.name }}</h2>
+    
+    <h3>Subfolders</h3>
+    <div class="row">
+        {% for subfolder in subfolders %}
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ subfolder.name }}</h5>
+                    <a href="{% url 'open_folder' subfolder.id %}" class="btn btn-primary">Open</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No subfolders found.</p>
+        {% endfor %}
+    </div>
+
+    <h3>Files</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td>
+                    <a href="{% url 'download' file.id %}">Download</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No files found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

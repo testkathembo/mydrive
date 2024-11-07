@@ -1,0 +1,95 @@
+{% extends "base_nav.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="container mt-4 text-center">
+        <h3>Welcome <span class="text-primary">{{ name }}</span> to Drive</h3>
+    </div>
+    <div class="container mt-4 text-center">
+        <form method="GET" action="{% url 'search_drive' %}" style="width:60%; margin-left:23%;">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ search_form.q.value }}" class="form-control" placeholder="Search in Drive" aria-label="Search" style="border-radius: 25px; border: 1px solid #007bff;">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success" type="submit" style="border-radius: 25px;">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <h2 class="mt-5 text-primary">Suggested Folders</h2>
+    <div class="row">
+        {% for folder in folders %}
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ folder.name|default:"No Name Provided" }}</h5>
+                    <p class="card-text">Owner: {{ folder.owner.username }}</p>
+                    <p class="card-text">Created: {{ folder.created_at|date:"M d, Y H:i" }}</p>
+                    <a href="{% url 'delete_folder' folder.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this folder?');">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>No folders found.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <h2 class="mt-5 text-primary">Suggested Files</h2>
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Last Modified</th>
+                <th>File Size</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.name|default:"No Name Provided" }}</td>
+                <td>{{ file.owner.username }}</td>
+                <td>{{ file.last_modified|date:"M d, Y H:i" }}</td>
+                <td>{{ file.file_size }}</td>
+                <td>                   
+                    <a class="nav-link" href="#" id="popButton{{ file.id }}" role="button" data-toggle="collapse" data-target="#popDropdown{{ file.id }}" aria-expanded="false" aria-controls="popDropdown{{ file.id }}">
+                        <span style="color:white; background: black; border-radius: 10%; padding: 5px;"><i class="fa fa-ellipsis-v"></i></span>
+                    </a>
+                    <div class="collapse position-absolute card" id="popDropdown{{ file.id }}" style="z-index: 1000; width: 200px;">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" href="{% url 'download' file.id %}"><i class="fa fa-download"></i> Download </a>
+                                </li>                            
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" href="{% url 'delete' file.id %}" onclick="return confirm('Are you sure you want to delete this file?');"><i class="fa fa-trash"></i> Trash</a>
+                                </li>                                
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" href="{% url 'copy_file' file.id %}"><i class="fas fa-copy"></i> Copy</a>
+                                </li>
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" href="{% url 'share_file' file.id %}"><i class="fa fa-share"></i> Share</a>
+                                </li>
+                                <li style="cursor: pointer;">
+                                    <a class="dropdown-item" href="{% url 'move_file' file.id %}"><i class="fa fa-arrows"></i> Move</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No files found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}

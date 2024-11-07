@@ -1,0 +1,18 @@
+{% extends "base_nav.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Contents of {{ folder.name }}</h1>
+    <h2>Files</h2>
+    {% if files %}
+        <ul>
+            {% for file in files %}
+            <li>{{ file.name }} - <a href="{% url 'download_file' file.id %}">Download</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files found.</p>
+    {% endif %}
+</div>
+{% endblock %}

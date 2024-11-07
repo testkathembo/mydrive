@@ -1,0 +1,97 @@
+{% extends 'base_nav.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>Data Distribution</h2>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Pie Chart Column -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Pie Chart</h5>
+                    <div class="chart-container" style="position: relative; height:40vh; width:100%; margin-left:26%">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bar Chart Column -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Bar Chart</h5>
+                    <div class="chart-container" style="position: relative; height:40vh; width:100%">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var fileTypes = JSON.parse(document.getElementById('file_types').textContent);
+    var fileTypeColors = JSON.parse(document.getElementById('file_type_colors').textContent);
+
+    // Pie Chart
+    var pieCtx = document.getElementById('pieChart').getContext('2d');
+    var pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: fileTypes.map(ft => ft.file_type),
+            datasets: [{
+                data: fileTypes.map(ft => ft.count),
+                backgroundColor: fileTypeColors
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 10
+                    }
+                }
+            }
+        }
+    });
+
+    // Bar Chart
+    var barCtx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: fileTypes.map(ft => ft.file_type),
+            datasets: [{
+                label: 'Count',
+                data: fileTypes.map(ft => ft.count),
+                backgroundColor: fileTypeColors,
+                borderColor: fileTypeColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+});
+</script>
+
+{{ file_types|json_script:"file_types" }}
+{{ file_type_colors|json_script:"file_type_colors" }}
+{% endblock %}
