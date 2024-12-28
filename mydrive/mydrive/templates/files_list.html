@@ -1,0 +1,25 @@
+<!-- partials/file_list.html -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Last Modified</th>
+            <th>File Size</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.name }}</td>
+            <td>{{ file.owner.username }}</td>
+            <td>{{ file.last_modified|date:"M d, Y H:i" }}</td>
+            <td>{{ file.file_size }}</td>
+            <td> ... </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No files found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

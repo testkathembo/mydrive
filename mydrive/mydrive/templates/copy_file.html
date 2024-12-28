@@ -1,0 +1,20 @@
+{% extends "base_nav.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <center>
+        <div class="card-header">
+            <h2>Copy File: {{ file.file.name }}</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Copy File</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </center>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,33 @@
+{% extends "base_nav.html" %}
+{% include "base.html" %}
+
+{% block content %}
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card" style="max-width: 400px; width: 100%;">  <!-- Set max-width to reduce size -->
+        <div class="card-header">
+            <h2 style="text-align: center;">New Folder</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div>
+                    <input type="text" name="folder_name" id="folder_name" class="form-control" placeholder="Folder Name" required oninput="toggleButton()">
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="submit" class="btn btn-primary" id="createButton" disabled>Create</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleButton() {
+        const inputField = document.getElementById('folder_name');
+        const createButton = document.getElementById('createButton');
+        // Enable the button if the input field has text, otherwise disable it
+        createButton.disabled = inputField.value.trim() === '';
+    }
+</script>
+{% endblock %}
